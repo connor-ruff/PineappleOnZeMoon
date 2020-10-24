@@ -19,14 +19,7 @@ class Base:
 
         return pineapples
 
-    def checkStruc7(self):
-        for ID in self.chamDict.keys():
-            heat = self.chamDict[ID].getHeat(self.chamDict)
-            #print(f'Heat at {ID}: {heat}')
-            if (heat > 7):
-                return False
 
-        return True        
 
     def checkStruc11(self):
         for ID in self.chamDict.keys():
