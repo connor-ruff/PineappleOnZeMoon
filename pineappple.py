@@ -25,7 +25,7 @@ class Base:
         for ID in self.chamDict.keys():
             heat = self.chamDict[ID].getHeat(self.chamDict)
             #print(f'Heat at {ID}: {heat}')
-            if (heat > 7):
+            if (heat > 11):
                 return False
 
         return True 
