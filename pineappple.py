@@ -99,6 +99,7 @@ class Chamber:
             
               
 visited = {}
+totalsList = []
 
 def main():
     
@@ -120,13 +121,14 @@ def main():
 
     #print(f'Total Bases: {j}')
     f.close()
-    
+    print(totalsList)
+    print(f'Sum: {sum(totalsList)}')
 
 def newBase(allLines, numRad, i):
     base = Base()
     
     chamList = []
-    #print('\nnew base!')
+    print('\nnew base!')
     #print(f'lines: {len(allLines)}')
     while (i < len(allLines) and allLines[i].rstrip() != "Pineapple Moon Base"):
         # Get Chamber ID and Num Pinepaples To Grow
@@ -163,14 +165,15 @@ def newBase(allLines, numRad, i):
 
 def evaluateBase(base, numRad):
 
-    #print(f'Chambers: {len(base.chamDict)}  Radiators: {numRad}')
+    print(f'Chambers: {len(base.chamDict)}  Radiators: {numRad}')
 
     rootID = list(base.chamDict.keys())[0]
     placeNodes(base, numRad, rootID)
 
-    #print(f'\nTotal: {base.getTotalBasePineapples()}')
-    #print(f'Placed: {base.radsPlaced}')
-    #print(f'Final Check: {base.checkStruc11()}')
+    print(f'Total: {base.getTotalBasePineapples()}')
+    print(f'Placed: {base.radsPlaced}')
+    print(f'Final Check: {base.checkStruc11()}')
+    totalsList.append(base.getTotalBasePineapples())
     
 
 def placeNodes(base, numRad, rootID):
@@ -204,6 +207,8 @@ def placeNodes(base, numRad, rootID):
     progress = len(visited)/len(base.chamDict) # describes progress of visited nodes
 
 
+    beforeAdd = base.getTotalBasePineapples()
+
     if (progress > ratio):
         base.chamDict[rootID].hasRad = True
 
@@ -213,8 +218,13 @@ def placeNodes(base, numRad, rootID):
             base.chamDict[rootID].hasRad = False
             #print(f'Did not place rad at {rootID}')
         else:
-            print(f'{rootID}', end=', ')
+            #print(f'{rootID}', end=', ') //TODO: this comes back
             base.radsPlaced +=1
+            after = base.getTotalBasePineapples()
+            if (beforeAdd > after):
+                base.chamDict[rootID].hasRad = False
+                base.radsPlaced -= 1
+            
 
 
     if neighbors[0] is not None:
