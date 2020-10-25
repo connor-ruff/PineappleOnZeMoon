@@ -121,14 +121,14 @@ def main():
 
     #print(f'Total Bases: {j}')
     f.close()
-    print(totalsList)
-    print(f'Sum: {sum(totalsList)}')
+    #print(totalsList)
+    #print(f'Sum: {sum(totalsList)}')
 
 def newBase(allLines, numRad, i):
     base = Base()
     
     chamList = []
-    print('\nnew base!')
+    #print('\nnew base!')
     #print(f'lines: {len(allLines)}')
     while (i < len(allLines) and allLines[i].rstrip() != "Pineapple Moon Base"):
         # Get Chamber ID and Num Pinepaples To Grow
@@ -165,14 +165,18 @@ def newBase(allLines, numRad, i):
 
 def evaluateBase(base, numRad):
 
-    print(f'Chambers: {len(base.chamDict)}  Radiators: {numRad}')
+    #print(f'Chambers: {len(base.chamDict)}  Radiators: {numRad}')
 
     rootID = list(base.chamDict.keys())[0]
     placeNodes(base, numRad, rootID)
 
-    print(f'Total: {base.getTotalBasePineapples()}')
-    print(f'Placed: {base.radsPlaced}')
-    print(f'Final Check: {base.checkStruc11()}')
+    if (numRad != base.radsPlaced):
+        #print('Short')
+        fillinRest(base, numRad)
+
+    #print(f'Total: {base.getTotalBasePineapples()}')
+    #print(f'Placed: {base.radsPlaced}')
+    #print(f'Final Check: {base.checkStruc11()}')
     totalsList.append(base.getTotalBasePineapples())
     
 
@@ -218,7 +222,7 @@ def placeNodes(base, numRad, rootID):
             base.chamDict[rootID].hasRad = False
             #print(f'Did not place rad at {rootID}')
         else:
-            #print(f'{rootID}', end=', ') //TODO: this comes back
+            print(f'{rootID}', end=', ') #TODO: this comes back
             base.radsPlaced +=1
             after = base.getTotalBasePineapples()
             if (beforeAdd > after):
@@ -239,7 +243,26 @@ def placeNodes(base, numRad, rootID):
     if neighbors[3] is not None:
         placeNodes(base, numRad, neighbors[3])
 
-    
+def fillinRest(base, numRad):
+    #toFill = numRad - base.radsPlaced
+    #print(f'Max: {numRad}   Curr: {base.radsPlaced}')
+
+    while(base.radsPlaced < numRad):
+        for entry in base.chamDict.keys():
+            if not base.chamDict[entry].hasRad:
+                #be4 = base.getTotalBasePineapples()
+                base.chamDict[entry].hasRad = True
+                isvalid = base.checkStruc11()
+                #after = base.getTotalBasePineapples()
+                if not ( isvalid):
+                    #print('Not Valid')
+                    base.chamDict[entry].hasRad = False
+                else:
+                    #print('Added Another!!!!!')
+                    print(f'{entry}', end=', ') #TODO: this comes back
+                    base.radsPlaced +=1
+                    break
+
     
 if __name__== "__main__":
     main()
